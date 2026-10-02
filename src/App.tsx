@@ -1,15 +1,14 @@
-import { useState } from 'react'
-import './App.css'
-// dashboard
-import Dashboard from './pages/Dashboard';
-
+import "./App.css";
+import Dashboard from "./pages/Dashboard";
+import NewEntry from "./pages/NewEntry";
 
 function App() {
-  
-
-  return(
-    <Dashboard />
-  )
+  return (
+    <>
+      <Dashboard />
+      <NewEntry />
+    </>
+  );
 }
 
-export default App
+export default App;

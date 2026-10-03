@@ -1,12 +1,11 @@
-import { ArrowLeft } from "lucide-react";
-import TextBox from "../components/TestEditor";
+import { ArrowLeft, Sparkles, Bookmark, FileText } from "lucide-react";
+import TextBox from "../components/TextEditor";
 import MoodSelector from "../components/MoodSelector";
 import EnergySelector from "../components/EnergySelector";
 
 function NewEntry() {
   return (
-    <div className="w-full min-h-screen bg-[#FAEAD3] font-[Artifika] p-3 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4 max-w-6xl mx-auto relative">
-      
+    <form className="w-full min-h-screen bg-[#FAEAD3] font-[Artifika] p-3 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4 max-w-6xl mx-auto relative">
       {/* Back Button */}
       <div>
         <button
@@ -37,7 +36,48 @@ function NewEntry() {
         {/* Energy Selector */}
         <EnergySelector />
       </div>
-    </div>
+      {/* Bottom Action Buttons */}
+      <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+        {/* Rewrite with AI Button */}
+        <button
+          type="button"
+          className="group relative rounded-xl border border-[#D4A373]/90 bg-[#F7E7D4] p-1 shadow-sm hover:bg-[#edd8be] active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <div className="flex items-center gap-2 rounded-lg border border-dashed border-[#C89B6D] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[#4E2811]">
+            <Sparkles size={18} className="text-[#4E2811] shrink-0" />
+            <span className="font-[Caveat] text-lg sm:text-xl font-bold tracking-wide">
+              Rewrite with AI
+            </span>
+          </div>
+        </button>
+
+        {/* Save as Draft Button */}
+        <button
+          type="button"
+          className="group relative rounded-xl border border-[#D4A373]/90 bg-[#F7E7D4] p-1 shadow-sm hover:bg-[#edd8be] active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <div className="flex items-center gap-2 rounded-lg border border-dashed border-[#C89B6D] px-3.5 sm:px-4 py-1.5 sm:py-2 text-[#4E2811]">
+            <FileText size={18} className="text-[#4E2811] shrink-0" />
+            <span className="font-[Caveat] text-lg sm:text-xl font-bold tracking-wide">
+              Save as Draft
+            </span>
+          </div>
+        </button>
+
+        {/* Save Entry / Submit Button */}
+        <button
+          type="submit"
+          className="group relative rounded-xl border border-[#231208] bg-[#341D0F] p-1 shadow-md hover:bg-[#432615] active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <div className="flex items-center gap-2 rounded-lg border border-dashed border-[#8E5E3B]/90 px-4 sm:px-5 py-1.5 sm:py-2 text-[#F7D184]">
+            <Bookmark size={18} className="text-[#F7D184] shrink-0" />
+            <span className="font-[Caveat] text-lg sm:text-xl font-bold tracking-wide">
+              Save Entry
+            </span>
+          </div>
+        </button>
+      </div>
+    </form>
   );
 }
 

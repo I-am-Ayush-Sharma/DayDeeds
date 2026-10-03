@@ -20,6 +20,7 @@
     "dayjs": "^1.11.23",
     "emoji-picker-react": "^4.22.3",
     "lucide-react": "^1.48.0",
+    "motion": "^14.0.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3"

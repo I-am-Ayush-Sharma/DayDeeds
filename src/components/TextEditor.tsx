@@ -135,19 +135,23 @@ export default function TextBox() {
   });
   const editorState = useEditorState({
     editor,
-    selector: ({ editor }) => ({
-      isBold: editor?.isActive("bold"),
-      isItalic: editor?.isActive("italic"),
-      isUnderline: editor?.isActive("underline"),
-      isStrike: editor?.isActive("strike"),
-      isBulletList: editor?.isActive("bulletList"),
-      isOrderedList: editor?.isActive("orderedList"),
-      isBlockquote: editor?.isActive("blockquote"),
-      isH1: editor?.isActive("heading", { level: 1 }),
-      isH2: editor?.isActive("heading", { level: 2 }),
-      isSmallText: editor?.isActive("smallText"),
-      isLink: editor?.isActive("link"),
-    }),
+    selector: ({ editor }) => {
+      const text = editor?.getText().trim() || "";
+      return {
+        isBold: editor?.isActive("bold"),
+        isItalic: editor?.isActive("italic"),
+        isUnderline: editor?.isActive("underline"),
+        isStrike: editor?.isActive("strike"),
+        isBulletList: editor?.isActive("bulletList"),
+        isOrderedList: editor?.isActive("orderedList"),
+        isBlockquote: editor?.isActive("blockquote"),
+        isH1: editor?.isActive("heading", { level: 1 }),
+        isH2: editor?.isActive("heading", { level: 2 }),
+        isSmallText: editor?.isActive("smallText"),
+        isLink: editor?.isActive("link"),
+        wordCount: text ? text.split(/\s+/).filter(Boolean).length : 0,
+      };
+    },
   });
 
   const getCurrentSizeLabel = () => {
@@ -227,7 +231,7 @@ export default function TextBox() {
   };
 
   return (
-    <form className="w-full mt-4 bg-[#FDF3E6] rounded-lg border-2 border-[#CEA174] p-3 sm:p-4 text-black text-base sm:text-lg font-[Artifika] flex flex-col gap-3 sm:gap-4 shadow-sm">
+    <section className="w-full mt-4 bg-[#FDF3E6] rounded-lg border-2 border-[#CEA174] p-3 sm:p-4 text-black text-base sm:text-lg font-[Artifika] flex flex-col gap-3 sm:gap-4 shadow-sm">
       {/* Stats */}
       <div className="flex flex-col flex-wrap sm:flex-row justify-between items-start sm:items-center gap-2 text-xs sm:text-sm">
         <div className="flex flex-wrap items-center gap-2">
@@ -477,12 +481,17 @@ export default function TextBox() {
       </div>
 
       {/* TipTap Editor */}
-      <div className="card">
+      <div className="card flex flex-col">
         <Tiptap editor={editor} />
+        <div className="flex justify-end pt-1">
+          <span className="text-xs text-[#8C6D53] font-medium tracking-wide select-none">
+            {editorState?.wordCount ?? 0} {editorState?.wordCount === 1 ? "word" : "words"}
+          </span>
+        </div>
       </div>
 
       {/* Tags */}
       <Tags />
-    </form>
+    </section>
   );
 }

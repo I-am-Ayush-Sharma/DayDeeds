@@ -1,1 +1,144 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "DM Sans", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f7eee3;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* -------------------------------- */
+/* Fade Up */
+/* -------------------------------- */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.7s ease-out both;
+}
+
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+/* -------------------------------- */
+/* Wave */
+/* -------------------------------- */
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(-8deg);
+  }
+
+  75% {
+    transform: rotate(12deg);
+  }
+}
+
+.animate-wave {
+  transform-origin: 70% 70%;
+  animation: wave 2.2s ease-in-out infinite;
+}
+
+/* -------------------------------- */
+/* Chart */
+/* -------------------------------- */
+
+@keyframes chartDraw {
+  from {
+    stroke-dasharray: 0 2000;
+  }
+
+  to {
+    stroke-dasharray: 2000 0;
+  }
+}
+
+.animate-chart-line {
+  stroke-dasharray: 2000;
+  animation: chartDraw 2.2s ease-out forwards;
+}
+
+@keyframes chartArea {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-chart-area {
+  animation: chartArea 1.8s ease-out forwards;
+}
+
+/* -------------------------------- */
+/* Energy moving line */
+/* -------------------------------- */
+
+@keyframes energyMove {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-energy-line {
+  animation: energyMove 2s linear infinite;
+}
+
+/* -------------------------------- */
+/* Custom scrollbar */
+/* -------------------------------- */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #eee1d3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b69a82;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8e705b;
+}

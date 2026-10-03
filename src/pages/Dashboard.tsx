@@ -1,20 +1,14 @@
-<<<<<<< HEAD
+import WelcomeHeader from "./Dashborads/WelcomeHeader";
+import WeeklyStreak from "./Dashborads/WeeklyStreak";
+import JournalPrompt from "./Dashborads/JournalPrompt";
+import MoodEnergyChart from "./Dashborads/MoodEnergyChart";
+import RecentThoughts from "./Dashborads/RecentThoughts";
+
 export default function Dashboard() {
-=======
-import React from "react";
-
-import WelcomeHeader from "../pages/Dashborads/WelcomeHeader";
-import WeeklyStreak from "../pages/Dashborads/WeeklyStreak";
-import JournalPrompt from "../pages/Dashborads/JournalPrompt";
-import MoodEnergyChart from "../pages/Dashborads/MoodEnergyChart";
-import RecentThoughts from "../pages/Dashborads/RecentThoughts";
-
-const Dashboard: React.FC = () => {
   const handleJournalClick = () => {
-   // console.log("Open journal");
+    console.log("Journal clicked");
   };
 
->>>>>>> 4d1dff11266f24e1f0b5789875d11615c84388ad
   return (
     <main className="
       min-h-screen
@@ -25,7 +19,7 @@ const Dashboard: React.FC = () => {
       lg:px-8
     ">
 
-      <div className="mx-auto max-w-[1500px]">
+      <div className="mx-auto max-w-375">
 
         {/* Top section */}
         <div className="
@@ -57,6 +51,4 @@ const Dashboard: React.FC = () => {
       </div>
     </main>
   );
-};
-
-export default Dashboard;
+}

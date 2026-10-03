@@ -17,17 +17,14 @@ export default function EnergySelector() {
 
     setEnergy(value);
     setProgress(percentage * 100);
-    console.log(value);
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    // Capture pointer so events keep firing even if cursor leaves the track
     e.currentTarget.setPointerCapture(e.pointerId);
     calculateFromClientX(e.clientX);
   }
 
   function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    // Only update while a button is held down
     if (e.buttons === 0) return;
     calculateFromClientX(e.clientX);
   }
@@ -43,7 +40,11 @@ export default function EnergySelector() {
         </p>
       </div>
 
-      {/* Track Bar */}
+      <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-[#4E2811]">
+        <span>Selected:</span>
+        <span className="rounded-full bg-[#F1E2CF] px-2 py-0.5">{energy}/10</span>
+      </div>
+
       <div className="w-full">
         <div
           ref={trackRef}
@@ -51,7 +52,6 @@ export default function EnergySelector() {
           onPointerMove={handlePointerMove}
           className="relative bg-[#F1E2CF] w-full h-4 sm:h-5 rounded-full mt-1 border border-[#CEA174]/60 cursor-pointer select-none"
         >
-          {/* Dots */}
           <div className="absolute inset-0 grid grid-cols-10 items-center">
             {Array.from({ length: 10 }, (_, i) => (
               <span
@@ -61,13 +61,11 @@ export default function EnergySelector() {
             ))}
           </div>
 
-          {/* Progress */}
           <div
             className="absolute inset-y-0 left-0.5 my-auto bg-[#F8B44B] h-2.5 sm:h-3 rounded-full"
             style={{ width: `${progress}%` }}
           />
 
-          {/* Thumb */}
           <motion.div
             style={{ left: `${progress}%` }}
             className="absolute flex justify-center z-20 items-center inset-y-0 my-auto -translate-x-1/2 bg-[#F4C277] border-2 border-[#794924] w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-sm cursor-grab"
@@ -76,7 +74,6 @@ export default function EnergySelector() {
           </motion.div>
         </div>
 
-        {/* Levels */}
         <div className="grid grid-cols-10 text-[10px] sm:text-xs text-[#4E2811] mt-2 font-medium">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
             <span key={n} className="text-center">

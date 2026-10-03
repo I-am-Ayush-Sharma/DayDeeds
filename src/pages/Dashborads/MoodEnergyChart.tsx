@@ -60,7 +60,7 @@ const MoodEnergyChart: React.FC<MoodEnergyChartProps> = ({
       {/* Header */}
       <div className="
         flex flex-col gap-3
-        border-b border-white/[0.06]
+        border-b border-white/6
         px-5 py-4
         sm:flex-row sm:items-center sm:justify-between
         sm:px-6
@@ -99,7 +99,7 @@ const MoodEnergyChart: React.FC<MoodEnergyChartProps> = ({
           blur-3xl
         " />
 
-        <div className="relative h-[250px] w-full">
+        <div className="relative h-62.5 w-full">
 
           {/* Grid */}
           <div className="
@@ -117,7 +117,7 @@ const MoodEnergyChart: React.FC<MoodEnergyChartProps> = ({
                   {value}
                 </span>
 
-                <div className="h-px flex-1 bg-white/[0.06]" />
+                <div className="h-px flex-1 bg-white/6" />
               </div>
             ))}
           </div>
@@ -274,7 +274,7 @@ const MoodEnergyChart: React.FC<MoodEnergyChartProps> = ({
         <div className="
           mt-3 flex
           items-center justify-between
-          border-t border-white/[0.06]
+          border-t border-white/6
           pt-4
         ">
           <span className="text-xs text-[#aaa09a]">

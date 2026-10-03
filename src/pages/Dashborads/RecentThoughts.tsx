@@ -74,7 +74,7 @@ const RecentThoughts: React.FC<RecentThoughtsProps> = ({
               group relative overflow-hidden
               rounded-[20px]
               border border-[#dcc8b3]
-              bg-gradient-to-r from-[#fff8ed] to-[#f7ead9]
+              bg-linear-to-r from-[#fff8ed] to-[#f7ead9]
               p-4
               shadow-[0_6px_20px_rgba(80,45,25,0.06)]
               transition-all duration-500

@@ -45,6 +45,7 @@ export default function TextBox() {
   const linkPopoverRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const hasEntry = entry.trim().length > 0;
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -244,7 +245,7 @@ export default function TextBox() {
           </div>
         </div>
         <div className="px-2.5 sm:px-3 py-1 flex justify-center bg-green-500/15 items-center rounded-lg border-[#ddac75] border text-green-800 font-medium shrink-0">
-          <Dot className="scale-150 sm:scale-200" color={"green"} /> Saved
+          <Dot className="scale-150 sm:scale-200" color={"green"} /> {hasEntry ? "Saved Draft" : "Ready to Write"}
         </div>
       </div>
 

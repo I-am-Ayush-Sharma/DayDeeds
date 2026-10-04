@@ -1,11 +1,11 @@
 import { ArrowLeft, Sparkles, Bookmark, FileText } from "lucide-react";
-import TextBox from "../components/TextEditor";
-import MoodSelector from "../components/MoodSelector";
-import EnergySelector from "../components/EnergySelector";
+import TextBox from "../components/newEntry-comps/TextEditor";
+import MoodSelector from "../components/newEntry-comps/MoodSelector";
+import EnergySelector from "../components/newEntry-comps/EnergySelector";
 
 function NewEntry() {
   return (
-    <form className="w-full min-h-screen bg-[#FAEAD3] font-[Artifika] p-3 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4 max-w-6xl mx-auto relative">
+    <form className="w-full min-h-screen bg-[#FAEAD3] font-[Artifika] p-3 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4 mx-auto relative">
       {/* Back Button */}
       <div>
         <button

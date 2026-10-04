@@ -461,7 +461,7 @@ export default function TextBox() {
               <Smile size={16} className="sm:w-4.5 sm:h-4.5" />
             </button>
             {showEmojiPicker && (
-              <div className="absolute right-0 top-full mt-1.5 z-50">
+              <div className="absolute left-0 top-full mt-1.5 z-50">
                 <EmojiPicker
                   onEmojiClick={(emojiData) => {
                     editor?.chain().focus().insertContent(emojiData.emoji).run();

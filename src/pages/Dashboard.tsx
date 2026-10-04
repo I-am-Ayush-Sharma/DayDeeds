@@ -10,29 +10,29 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="
+    <main
+      className="
       min-h-screen
       bg-[#f7eee3]
       px-3 py-4
       text-[#3d2920]
       sm:px-5
       lg:px-8
-    ">
-
-      <div className="mx-auto max-w-375">
-
+    "
+    >
+      <div className="mx-auto ">
         {/* Top section */}
-        <div className="
+        <div
+          className="
           grid
           gap-4
           lg:grid-cols-[1fr_370px]
           lg:items-center
-        ">
-
+        "
+        >
           <WelcomeHeader />
 
           <WeeklyStreak />
-
         </div>
 
         {/* Journal prompt */}
@@ -47,7 +47,6 @@ export default function Dashboard() {
 
         {/* Recent thoughts */}
         <RecentThoughts />
-
       </div>
     </main>
   );

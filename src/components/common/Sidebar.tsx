@@ -1,8 +1,8 @@
 import Sidebarbg from "../../assets/images/sidebarbg.png";
 import {
   BookOpen,
-  CalendarDays,
-  ChartNoAxesColumnIncreasing,
+  // CalendarDays,
+  History,
   LayoutGrid,
   Settings,
   Sun,
@@ -59,28 +59,34 @@ function Sidebar({
             <LayoutGrid size={14} strokeWidth={2} />
             <span>Dashboard</span>
           </NavLink>
-          <NavLink
-            to="/journal/new"
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              `flex h-8 items-center gap-2 rounded-lg border px-2 text-xs transition-colors ${
-                isActive
-                  ? "border-[#795038] bg-[#4b2c20]/90 font-semibold text-[#e6b574]"
-                  : "border-transparent text-[#e4c7a4] hover:bg-[#4b2c20]/55"
-              }`
-            }
-          >
-            <BookOpen size={14} strokeWidth={2} />
-            <span>Journal</span>
-          </NavLink>
-          <div className="flex h-8 items-center gap-2 rounded-lg px-2 text-xs text-[#e4c7a4]">
-            <CalendarDays size={14} strokeWidth={2} />
-            <span>Calendar</span>
-          </div>
-          <div className="flex h-8 items-center gap-2 rounded-lg px-2 text-xs text-[#e4c7a4]">
-            <ChartNoAxesColumnIncreasing size={14} strokeWidth={2} />
-            <span>Insights</span>
-          </div>
+            <NavLink
+              to="/journal/new"
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                `flex h-8 items-center gap-2 rounded-lg border px-2 text-xs transition-colors ${
+                  isActive
+                    ? "border-[#795038] bg-[#4b2c20]/90 font-semibold text-[#e6b574]"
+                    : "border-transparent text-[#e4c7a4] hover:bg-[#4b2c20]/55"
+                }`
+              }
+            >
+              <BookOpen size={14} strokeWidth={2} />
+              <span>Journal</span>
+            </NavLink>
+            <NavLink
+              to="/history"
+              onClick={onNavigate}
+              className={({ isActive }) =>
+                `flex h-8 items-center gap-2 rounded-lg border px-2 text-xs transition-colors ${
+                  isActive
+                    ? "border-[#795038] bg-[#4b2c20]/90 font-semibold text-[#e6b574]"
+                    : "border-transparent text-[#e4c7a4] hover:bg-[#4b2c20]/55"
+                }`
+              }
+            >
+              <History size={14} strokeWidth={2} />
+              <span>History</span>
+            </NavLink>
         </nav>
 
         <div className="mt-auto flex h-8 shrink-0 items-center gap-2 rounded-lg px-2 text-xs text-[#e4c7a4]">

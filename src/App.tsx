@@ -7,7 +7,6 @@ import History from "./pages/History";
 import Layout from "./Layout";
 import Calendar from "./pages/Calendar";
 
-import Inshights  from "./pages/Inshights";
 
 
 function App() {
@@ -17,6 +16,8 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/journal/new" element={<NewEntry />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/calendar" element={<Calendar />} />
         </Route>
       </Routes>
     </BrowserRouter>

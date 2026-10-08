@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import NewEntry from "./pages/NewEntry";
+import History from "./pages/History";
 import Layout from "./Layout";
 import Calendar from "./pages/Calendar";
 
@@ -16,9 +17,6 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/journal/new" element={<NewEntry />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/journal/calendar" element={<Calendar />} />
-          <Route path="/Inshights" element={Inshights}/>
         </Route>
       </Routes>
     </BrowserRouter>

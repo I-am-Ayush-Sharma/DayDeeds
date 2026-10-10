@@ -28,8 +28,8 @@ function Sidebar({
         backgroundPosition: "top center",
         backgroundRepeat: "no-repeat",
       }}
-      className={`fixed left-0 top-0 z-[100] flex h-screen w-[50vw] flex-col items-center justify-between bg-amber-600 transition-transform duration-300 ease-in-out md:w-[17%] ${
-        isOpen ? "translate-x-0" : "pointer-events-none -translate-x-[150%]"
+      className={`fixed left-0 top-0 z-100 flex h-screen w-[50vw] flex-col items-center justify-between bg-amber-600 transition-transform duration-300 ease-in-out md:w-[17%] ${
+        isOpen ? "translate-x-0" : "pointer-events-none translate-x-[-150%]"
       }`}
     >
       <div className="flex h-full w-full flex-col px-[7%] py-1.5">

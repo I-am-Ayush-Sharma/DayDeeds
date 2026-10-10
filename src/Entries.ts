@@ -7,8 +7,8 @@ export const Entries = [
     title: "A peaceful and productive day",
     content:
       "Had a great morning walk today. The sun was shining and the air felt crisp. I finally finished that project I've been putting off. Feeling much more relaxed now ...",
-    tags: ["coding", "productive", "walking", "chess"],
-    mood: "neutral",
+    tags: ["coding", "productive", "coffee", "chess"],
+    mood: "Good",
     energy: 5,
     words: 189,
     isfavorite: false,
@@ -22,7 +22,7 @@ export const Entries = [
     content:
       "Woke up early before the alarm. Brewed a fresh cup of coffee and sat by the window watching the morning light filter through the trees. Today's goal is staying centered and present.",
     tags: ["mindfulness", "coffee", "morning", "reflection"],
-    mood: "peaceful",
+    mood: "Okay",
     energy: 8,
     words: 245,
     isfavorite: true,

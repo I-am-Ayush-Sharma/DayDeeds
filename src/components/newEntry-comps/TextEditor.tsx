@@ -34,7 +34,13 @@ const textSizes = [
   { label: "Small Text", className: "text-xs" },
 ];
 
-export default function TextBox() {
+interface TextBoxProps {
+  onContentChange?: (content: string, contentHtml: string) => void;
+  tags?: string[];
+  onTagsChange?: (tags: string[]) => void;
+}
+
+export default function TextBox({ onContentChange, tags, onTagsChange }: TextBoxProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [entry, setEntry] = useState("");
   const [now, setNow] = useState(dayjs().format("hh:mm A"));
@@ -132,6 +138,7 @@ export default function TextBox() {
 
     onUpdate: ({ editor }) => {
       setEntry(editor.getHTML());
+      onContentChange?.(editor.getText(), editor.getHTML());
     },
   });
   const editorState = useEditorState({
@@ -492,7 +499,7 @@ export default function TextBox() {
       </div>
 
       {/* Tags */}
-      <Tags />
+      <Tags tags={tags} onTagsChange={onTagsChange} />
     </section>
   );
 }

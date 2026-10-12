@@ -6,31 +6,48 @@ import {
   Flame,
   PenLine,
 } from "lucide-react";
+import type { CalendarEntry } from "../../Types/calendar";
 
 interface Props {
   monthName?: string;
+  entries: CalendarEntry[];
 }
 
-const MonthReflection: React.FC<Props> = ({ monthName = "Month" }) => {
+const MonthReflection: React.FC<Props> = ({ monthName = "Month", entries }) => {
+  const average = (values: number[]) =>
+    values.length ? (values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(1) : "—";
+  const dates = [...new Set(entries.map((entry) => entry.date))].sort();
+  let bestStreak = 0;
+  let currentStreak = 0;
+  let previousDate: Date | undefined;
+  for (const dateText of dates) {
+    const date = new Date(`${dateText}T00:00:00`);
+    currentStreak =
+      previousDate && date.getTime() - previousDate.getTime() === 86_400_000
+        ? currentStreak + 1
+        : 1;
+    bestStreak = Math.max(bestStreak, currentStreak);
+    previousDate = date;
+  }
   const stats = [
     {
       label: "Total Entries",
-      value: "21",
+      value: String(entries.length),
       icon: <FileText size={20} />,
     },
     {
       label: "Average Mood",
-      value: "7.4/10",
+      value: `${average(entries.map((entry) => entry.moodScore))}/10`,
       icon: <Smile size={20} />,
     },
     {
       label: "Average Energy",
-      value: "6.8/10",
+      value: `${average(entries.map((entry) => entry.energyScore))}/10`,
       icon: <Zap size={20} />,
     },
     {
       label: "Best Streak",
-      value: "9 days",
+      value: `${bestStreak} days`,
       icon: <Flame size={20} />,
     },
   ];
@@ -104,7 +121,7 @@ const MonthReflection: React.FC<Props> = ({ monthName = "Month" }) => {
 
         <div>
           <p className="text-lg font-bold text-[#432c21]">
-            8,420
+            {entries.reduce((total, entry) => total + entry.words, 0).toLocaleString()}
           </p>
 
           <p className="text-[10px] text-[#876b58]">

@@ -1,10 +1,27 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
-export default function EnergySelector() {
-  const [energy, setEnergy] = useState(1);
-  const [progress, setProgress] = useState(0);
+interface EnergySelectorProps {
+  energy?: number;
+  onEnergyChange?: (energy: number) => void;
+}
+
+export default function EnergySelector({
+  energy: controlledEnergy,
+  onEnergyChange,
+}: EnergySelectorProps) {
+  const [localEnergy, setLocalEnergy] = useState(controlledEnergy ?? 5);
+  const energy = controlledEnergy ?? localEnergy;
+  const progress = ((energy - 1) / 9) * 100;
   const trackRef = useRef<HTMLDivElement>(null);
+
+  function updateEnergy(value: number) {
+    if (onEnergyChange) {
+      onEnergyChange(value);
+    } else {
+      setLocalEnergy(value);
+    }
+  }
 
   function calculateFromClientX(clientX: number) {
     const track = trackRef.current;
@@ -15,8 +32,7 @@ export default function EnergySelector() {
     const percentage = Math.max(0, Math.min(1, x / rect.width));
     const value = Math.round(percentage * 9) + 1;
 
-    setEnergy(value);
-    setProgress(percentage * 100);
+    updateEnergy(value);
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {

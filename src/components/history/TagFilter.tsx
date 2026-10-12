@@ -1,16 +1,18 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, Search, Tags } from "lucide-react";
-import { Entries } from "../../Entries";
 import useDismissibleDropdown from "./useDismissibleDropdown";
+import type { JournalEntry } from "../../Types/journal";
 
 interface TagFilterProps {
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
+  entries: JournalEntry[];
 }
 
 export default function TagFilter({
   selectedTags,
   onTagsChange,
+  entries,
 }: TagFilterProps) {
   const { isOpen, setIsOpen, dropdownRef } = useDismissibleDropdown();
   const [tagSearch, setTagSearch] = useState("");
@@ -19,12 +21,12 @@ export default function TagFilter({
     () =>
       Array.from(
         new Map(
-          Entries.flatMap(({ tags: entryTags }) =>
+          entries.flatMap(({ tags: entryTags }) =>
             entryTags.map((tag) => [tag.toLowerCase(), tag] as const),
           ),
         ).values(),
       ).sort((a, b) => a.localeCompare(b)),
-    [],
+    [entries],
   );
   const matchingTags = tags.filter((tag) =>
     tag.toLowerCase().includes(tagSearch.trim().toLowerCase()),

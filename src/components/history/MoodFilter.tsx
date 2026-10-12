@@ -1,15 +1,17 @@
 import { ChevronDown, Smile } from "lucide-react";
-import { Entries } from "../../Entries";
 import useDismissibleDropdown from "./useDismissibleDropdown";
+import type { JournalEntry } from "../../Types/journal";
 
 interface MoodFilterProps {
   selectedMood: string;
   onMoodChange: (mood: string) => void;
+  entries: JournalEntry[];
 }
 
 export default function MoodFilter({
   selectedMood,
   onMoodChange,
+  entries,
 }: MoodFilterProps) {
   const { isOpen, setIsOpen, dropdownRef } = useDismissibleDropdown();
   const moods = [
@@ -20,7 +22,7 @@ export default function MoodFilter({
       "Okay",
       "Low",
       "Bad",
-      ...Entries.map(
+      ...entries.map(
         ({ mood }) => mood.charAt(0).toUpperCase() + mood.slice(1),
       ),
     ]),

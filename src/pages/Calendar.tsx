@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useJournalEntries } from "../hooks/useJournalEntries";
 
 import CalendarHeader from "../pages/Calender/CalendarHeader";
 import CalendarGrid from "../pages/Calender/CalendarGrid";
@@ -12,60 +13,12 @@ import type {
   CalendarEntry,
 } from "../Types/calendar";
 
-const getSampleEntries = (month: Date): CalendarEntry[] => {
-  const year = month.getFullYear();
-  const monthStr = String(month.getMonth() + 1).padStart(2, "0");
-
-  return [
-    {
-      id: "1",
-      date: `${year}-${monthStr}-01`,
-      title: "A fresh beginning",
-      preview: `Started ${month.toLocaleDateString("en-US", { month: "long" })} with a clear mind.`,
-      content:
-        "Today felt like a fresh beginning. I started the month with a clear mind and a positive attitude.",
-      mood: "happy",
-      moodScore: 8,
-      energyScore: 7,
-      words: 342,
-    },
-    {
-      id: "2",
-      date: `${year}-${monthStr}-04`,
-      title: "Quiet morning",
-      preview: "A peaceful morning with coffee.",
-      content:
-        "Had a peaceful morning today. Coffee, some music and a little time away from everything.",
-      mood: "calm",
-      moodScore: 8,
-      energyScore: 6,
-      words: 280,
-    },
-    {
-      id: "3",
-      date: `${year}-${monthStr}-08`,
-      title: "Small wins",
-      preview: "Finished some important work.",
-      content:
-        "Today reminded me that small wins matter. Finished several things I had been delaying.",
-      mood: "focused",
-      moodScore: 7,
-      energyScore: 8,
-      words: 410,
-    },
-    {
-      id: "4",
-      date: `${year}-${monthStr}-18`,
-      title: "A beautiful day",
-      preview: "Morning walk and good thoughts.",
-      content:
-        "Had a great morning walk today. The sun was shining and the air felt crisp. I finally finished the project I've been putting off.",
-      mood: "happy",
-      moodScore: 9,
-      energyScore: 9,
-      words: 530,
-    },
-  ];
+const moodInfo: Record<string, { mood: CalendarEntry["mood"]; score: number }> = {
+  Great: { mood: "energetic", score: 9 },
+  Good: { mood: "happy", score: 7 },
+  Okay: { mood: "calm", score: 5 },
+  Low: { mood: "sad", score: 3 },
+  Bad: { mood: "sad", score: 1 },
 };
 
 const getCalendarDays = (
@@ -107,6 +60,7 @@ const getCalendarDays = (
 };
 
 const Calendar: React.FC = () => {
+  const { entries, isLoading, error } = useJournalEntries();
   // Always default to the current active month (e.g., October, November)
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
@@ -116,13 +70,35 @@ const Calendar: React.FC = () => {
   const [selectedDay, setSelectedDay] =
     useState<CalendarDay | null>(null);
 
-  const days = useMemo(
+  const calendarEntries = useMemo<CalendarEntry[]>(
     () =>
-      getCalendarDays(
-        currentMonth,
-        getSampleEntries(currentMonth)
-      ),
-    [currentMonth]
+      entries.map((entry) => ({
+        id: entry.id,
+        date: entry.date,
+        title: entry.title,
+        preview: entry.content.slice(0, 120),
+        content: entry.content,
+        mood: moodInfo[entry.mood].mood,
+        moodScore: moodInfo[entry.mood].score,
+        energyScore: entry.energy,
+        words: entry.words,
+      })),
+    [entries],
+  );
+
+  const monthEntries = useMemo(
+    () =>
+      calendarEntries.filter((entry) => {
+        const date = new Date(`${entry.date}T00:00:00`);
+        return date.getFullYear() === currentMonth.getFullYear() &&
+          date.getMonth() === currentMonth.getMonth();
+      }),
+    [calendarEntries, currentMonth],
+  );
+
+  const days = useMemo(
+    () => getCalendarDays(currentMonth, calendarEntries),
+    [currentMonth, calendarEntries],
   );
 
   const previousMonth = () => {
@@ -180,6 +156,15 @@ const Calendar: React.FC = () => {
             onToday={goToday}
           />
 
+          {error && (
+            <p role="alert" className="mb-4 rounded-lg bg-red-100 px-3 py-2 text-sm text-red-800">
+              {error}
+            </p>
+          )}
+          {isLoading && (
+            <p className="mb-4 text-sm text-[#765d4c]">Loading your calendar...</p>
+          )}
+
           <div className="
             grid gap-5
             xl:grid-cols-[minmax(0,1fr)_330px]
@@ -197,9 +182,10 @@ const Calendar: React.FC = () => {
                 monthName={currentMonth.toLocaleDateString("en-US", {
                   month: "long",
                 })}
+                entries={monthEntries}
               />
 
-              <MonthMood />
+              <MonthMood entries={monthEntries} />
 
               <AIReflection
                 month={currentMonth.toLocaleDateString(
@@ -209,6 +195,7 @@ const Calendar: React.FC = () => {
                     year: "numeric",
                   }
                 )}
+                entries={monthEntries}
               />
             </aside>
           </div>

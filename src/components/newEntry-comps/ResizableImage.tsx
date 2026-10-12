@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer, NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
 import { useState, useRef } from "react";

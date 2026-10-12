@@ -1,10 +1,11 @@
+import { useUser } from "@clerk/react";
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Navbar from "./components/common/Navbar";
 import Sidebar from "./components/common/Sidebar";
 
-
 export default function Layout() {
+  const { isLoaded, isSignedIn } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(() =>
     window.matchMedia("(min-width: 768px)").matches,
   );
@@ -16,9 +17,20 @@ export default function Layout() {
     };
 
     desktopQuery.addEventListener("change", handleBreakpointChange);
-    return () =>
-      desktopQuery.removeEventListener("change", handleBreakpointChange);
+    return () => desktopQuery.removeEventListener("change", handleBreakpointChange);
   }, []);
+
+  if (!isLoaded) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f5e9da] text-[#4d3124]">
+        <div className="text-lg font-semibold">Loading your journal...</div>
+      </div>
+    );
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="h-screen overflow-hidden bg-[#F5E0C5]">

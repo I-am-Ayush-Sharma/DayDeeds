@@ -8,20 +8,12 @@ export interface MoodData {
 
 interface MoodEnergyChartProps {
   data?: MoodData[];
+  onViewAll?: () => void;
 }
 
-const defaultData: MoodData[] = [
-  { day: "Mon", mood: 3, energy: 4 },
-  { day: "Tue", mood: 7, energy: 6 },
-  { day: "Wed", mood: 2, energy: 3 },
-  { day: "Thu", mood: 3, energy: 4 },
-  { day: "Fri", mood: 4, energy: 5 },
-  { day: "Sat", mood: 4, energy: 7 },
-  { day: "Sun", mood: 7, energy: 8 },
-];
-
 const MoodEnergyChart: React.FC<MoodEnergyChartProps> = ({
-  data = defaultData,
+  data = [],
+  onViewAll,
 }) => {
   const width = 700;
   const height = 240;
@@ -282,6 +274,8 @@ const MoodEnergyChart: React.FC<MoodEnergyChartProps> = ({
           </span>
 
           <button
+            type="button"
+            onClick={onViewAll}
             className="
               rounded-xl bg-[#403c41]
               px-3 py-2

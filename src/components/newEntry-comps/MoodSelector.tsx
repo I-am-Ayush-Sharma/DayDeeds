@@ -1,6 +1,7 @@
 import { useState } from "react";
+import type { JournalMood } from "../../Types/journal";
 
-const MOODS = [
+const MOODS: { label: JournalMood; emoji: string; tone: string }[] = [
   { label: "Great", emoji: "😄", tone: "#95FF80" },
   { label: "Good", emoji: "🙂", tone: "#E4FF76" },
   { label: "Okay", emoji: "😐", tone: "#FDFF70" },
@@ -8,8 +9,25 @@ const MOODS = [
   { label: "Bad", emoji: "😣", tone: "#FB6F6F" },
 ];
 
-export default function MoodSelector() {
-  const [selectedMood, setSelectedMood] = useState<string>("");
+interface MoodSelectorProps {
+  selectedMood?: JournalMood;
+  onMoodChange?: (mood: JournalMood) => void;
+}
+
+export default function MoodSelector({
+  selectedMood: controlledMood,
+  onMoodChange,
+}: MoodSelectorProps) {
+  const [localMood, setLocalMood] = useState<JournalMood>("Okay");
+  const selectedMood = controlledMood ?? localMood;
+
+  function updateMood(mood: JournalMood) {
+    if (onMoodChange) {
+      onMoodChange(mood);
+    } else {
+      setLocalMood(mood);
+    }
+  }
 
   return (
     <div className="mt-2 flex bg-[#FDF3E6] flex-col gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border-2 border-[#CEA174] shadow-sm">
@@ -29,11 +47,7 @@ export default function MoodSelector() {
             <button
               type="button"
               key={mood.label}
-              onClick={() =>
-                setSelectedMood((prev) =>
-                  prev !== mood.label ? mood.label : "",
-                )
-              }
+              onClick={() => updateMood(mood.label)}
               style={{
                 backgroundColor: isSelected ? `${mood.tone}66` : "#F3E5D5",
               }}

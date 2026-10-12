@@ -1,46 +1,32 @@
 import React, { useState } from "react";
+import { useAuth } from "@clerk/react";
 import { Sparkles, RefreshCw } from "lucide-react";
+import { generateJournalReflection } from "../../services/journalService";
+import type { CalendarEntry } from "../../Types/calendar";
 
 interface Props {
   month: string;
+  entries: CalendarEntry[];
 }
 
-const AIReflection: React.FC<Props> = ({ month }) => {
-  const [reflection, setReflection] = useState(
-    `${month} was a meaningful month. Your journal shows consistency, reflection, and a positive movement in your daily mood.`
-  );
-
+const AIReflection: React.FC<Props> = ({ month, entries }) => {
+  const { getToken } = useAuth();
+  const [reflection, setReflection] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const generateReflection = async () => {
+    setLoading(true);
+    setError("");
     try {
-      setLoading(true);
-
-      const response = await fetch(
-        "http://localhost:5000/api/ai/reflection",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            month,
-            entries: [
-              "Had a great morning walk today.",
-              "Finished an important project.",
-              "Spent some quiet time thinking about my goals.",
-            ],
-          }),
-        }
+      const result = await generateJournalReflection(
+        getToken,
+        month,
+        entries.map((entry) => entry.content),
       );
-
-      const data = await response.json();
-
-      if (data.reflection) {
-        setReflection(data.reflection);
-      }
-    } catch (error) {
-      console.error("AI reflection error:", error);
+      setReflection(result);
+    } catch (failure) {
+      setError(failure instanceof Error ? failure.message : "Could not generate the reflection.");
     } finally {
       setLoading(false);
     }
@@ -94,8 +80,10 @@ const AIReflection: React.FC<Props> = ({ month }) => {
           </div>
 
           <button
-            onClick={generateReflection}
-            disabled={loading}
+            type="button"
+            onClick={() => void generateReflection()}
+            disabled={loading || entries.length === 0}
+            aria-label="AI reflection requires API key configuration"
             className="
               flex h-9 w-9
               items-center justify-center
@@ -110,7 +98,6 @@ const AIReflection: React.FC<Props> = ({ month }) => {
           >
             <RefreshCw
               size={15}
-              className={loading ? "animate-spin" : ""}
             />
           </button>
         </div>
@@ -120,12 +107,17 @@ const AIReflection: React.FC<Props> = ({ month }) => {
           leading-6
           text-[#675044]
         ">
-          {loading ? "Reflecting on your month..." : reflection}
+          {loading
+            ? "Reflecting on your saved entries..."
+            : error || reflection || (entries.length
+              ? `Generate a reflection from your ${entries.length} saved ${entries.length === 1 ? "entry" : "entries"} for ${month}.`
+              : "Save an entry this month to get an AI reflection.")}
         </p>
 
         <button
-          onClick={generateReflection}
-          disabled={loading}
+          type="button"
+          onClick={() => void generateReflection()}
+          disabled={loading || entries.length === 0}
           className="
             mt-4 rounded-xl
             bg-[#a96334]

@@ -1,6 +1,9 @@
 import React from "react";
+import { useUser } from "@clerk/react";
 
 const WelcomeHeader: React.FC = () => {
+  const { user } = useUser();
+  const name = user?.firstName ?? "there";
   return (
     <section className="relative overflow-hidden rounded-[28px] px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
       
@@ -14,7 +17,7 @@ const WelcomeHeader: React.FC = () => {
         </p>
 
         <h1 className="font-serif text-4xl font-semibold leading-tight text-[#3a241c] sm:text-5xl lg:text-6xl animate-fade-up animation-delay-100">
-          Good evening, Ayush{" "}
+          Good evening, {name}{" "}
           <span className="inline-block animate-wave">👋</span>
         </h1>
 

@@ -10,34 +10,12 @@ export interface Thought {
 
 interface RecentThoughtsProps {
   thoughts?: Thought[];
+  onViewAll?: () => void;
 }
 
-const defaultThoughts: Thought[] = [
-  {
-    date: "Sep 26, Friday",
-    time: "10:45 AM",
-    text: "Had a great morning walk today. The sun was shining and the air felt crisp. I finally finished the project I've been putting off.",
-    mood: "Happy",
-    emoji: "😊",
-  },
-  {
-    date: "Sep 25, Thursday",
-    time: "08:20 PM",
-    text: "Spent some quiet time thinking about my goals and what I want to accomplish next.",
-    mood: "Calm",
-    emoji: "🌿",
-  },
-  {
-    date: "Sep 24, Wednesday",
-    time: "06:15 PM",
-    text: "A productive day overall. Managed to finish most of the tasks I planned.",
-    mood: "Focused",
-    emoji: "⚡",
-  },
-];
-
 const RecentThoughts: React.FC<RecentThoughtsProps> = ({
-  thoughts = defaultThoughts,
+  thoughts = [],
+  onViewAll,
 }) => {
   return (
     <section className="mt-6">
@@ -51,7 +29,7 @@ const RecentThoughts: React.FC<RecentThoughtsProps> = ({
           Recent Thoughts
         </h2>
 
-        <button className="
+        <button onClick={onViewAll} className="
           hidden rounded-xl
           bg-[#ead5bd]
           px-4 py-2
@@ -66,8 +44,12 @@ const RecentThoughts: React.FC<RecentThoughtsProps> = ({
         </button>
       </div>
 
-      <div className="space-y-3">
-        {thoughts.map((thought, index) => (
+      {thoughts.length ? <div className="space-y-3">
+        {thoughts.map((thought, index) => {
+          const dateParts = thought.date.split(/[\s,]+/);
+          const month = dateParts.length >= 3 ? dateParts[1] : dateParts[0] ?? "";
+          const day = dateParts.length >= 3 ? dateParts[2] : dateParts[1] ?? "";
+          return (
           <article
             key={`${thought.date}-${index}`}
             className="
@@ -85,7 +67,6 @@ const RecentThoughts: React.FC<RecentThoughtsProps> = ({
               animationDelay: `${index * 120}ms`,
             }}
           >
-
             {/* Hover shine */}
             <div className="
               pointer-events-none
@@ -128,8 +109,8 @@ const RecentThoughts: React.FC<RecentThoughtsProps> = ({
                   font-bold
                   text-[#65422f]
                 ">
-                  <span>SEP</span>
-                  <span className="text-sm">26</span>
+                  <span>{month.toUpperCase()}</span>
+                  <span className="text-sm">{day}</span>
                 </div>
               </div>
 
@@ -160,10 +141,15 @@ const RecentThoughts: React.FC<RecentThoughtsProps> = ({
               </div>
             </div>
           </article>
-        ))}
-      </div>
+          );
+        })}
+      </div> : (
+        <p className="rounded-2xl border border-[#dcc8b3] bg-[#fff8ed] p-5 text-sm text-[#765f51]">
+          Your saved journal entries will appear here.
+        </p>
+      )}
 
-      <button className="
+      <button onClick={onViewAll} className="
         mt-4 w-full
         rounded-xl
         border border-[#d8c1aa]

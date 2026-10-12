@@ -5,12 +5,12 @@ import {
   Heart,
   ListIcon,
   Search,
-  Trash,
 } from "lucide-react";
 import MoodFilter from "./MoodFilter";
 import TagFilter from "./TagFilter";
 import TimeFilter from "./TimeFilter";
 import useDismissibleDropdown from "./useDismissibleDropdown";
+import type { JournalEntry } from "../../Types/journal";
 
 type EntryFilter = "All Entries" | "Favorites";
 type SortOrder = "Newest" | "Oldest";
@@ -35,12 +35,12 @@ interface HistoryToolbarProps {
   onStartDateChange: (date: string) => void;
   endDate: string;
   onEndDateChange: (date: string) => void;
+  entries: JournalEntry[];
 }
 
 const entryFilters = [
   { icon: <Globe className="h-4 w-4" />, name: "All Entries" },
   { icon: <Heart className="h-4 w-4" />, name: "Favorites" },
-  { icon: <Trash className="h-4 w-4" />, name: "Trash" },
 ] as const;
 
 export default function HistoryToolbar({
@@ -62,6 +62,7 @@ export default function HistoryToolbar({
   onStartDateChange,
   endDate,
   onEndDateChange,
+  entries,
 }: HistoryToolbarProps) {
   const {
     isOpen: isSortOpen,
@@ -78,14 +79,10 @@ export default function HistoryToolbar({
               key={filter.name}
               type="button"
               aria-pressed={
-                filter.name === "Trash"
-                  ? undefined
-                  : entryFilter === filter.name
+                entryFilter === filter.name
               }
               onClick={() => {
-                if (filter.name !== "Trash") {
-                  onEntryFilterChange(filter.name);
-                }
+                onEntryFilterChange(filter.name);
               }}
               className={`flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl border px-3 py-1.5 text-xs font-medium transition-colors sm:text-sm ${
                 entryFilter === filter.name
@@ -193,8 +190,9 @@ export default function HistoryToolbar({
           <MoodFilter
             selectedMood={selectedMood}
             onMoodChange={onMoodChange}
+            entries={entries}
           />
-          <TagFilter selectedTags={selectedTags} onTagsChange={onTagsChange} />
+          <TagFilter selectedTags={selectedTags} onTagsChange={onTagsChange} entries={entries} />
           <TimeFilter
             selectedTimeFilter={selectedTimeFilter}
             onTimeFilterChange={onTimeFilterChange}

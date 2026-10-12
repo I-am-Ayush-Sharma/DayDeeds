@@ -1,5 +1,7 @@
+import { UserButton, useClerk, useUser } from "@clerk/react";
+import { Bell, Search, Sidebar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Bell, ChevronDown, Search, Sidebar } from "lucide-react";
 
 interface NavbarProps {
   isSidebarOpen: boolean;
@@ -7,6 +9,9 @@ interface NavbarProps {
 }
 
 function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) {
+  const navigate = useNavigate();
+  const { signOut } = useClerk();
+  const { user } = useUser();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -51,6 +56,7 @@ function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) {
         >
           <Sidebar size={20} />
         </button>
+
         <div
           ref={searchContainerRef}
           className={`flex h-10 min-w-12 items-center overflow-hidden rounded-full border border-[#9d704d]/30 bg-[#fff8ed]/65 text-[#684b37] shadow-[inset_0_1px_2px_#6f4c3020] transition-[flex-grow,width] duration-300 ease-out ${
@@ -90,16 +96,22 @@ function Navbar({ isSidebarOpen, onToggleSidebar }: NavbarProps) {
             <Bell size={20} strokeWidth={1.8} />
           </button>
 
+          <div className="flex items-center gap-2 rounded-full border border-[#8c5a38]/30 bg-[#fff8ed]/70 px-2 py-1 text-sm font-medium text-[#39291f]">
+            <span className="hidden sm:inline">
+              {user?.firstName ?? user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] ?? "User"}
+            </span>
+            <UserButton />
+          </div>
+
           <button
             type="button"
-            aria-label="Account menu for Ayush"
-            className="flex items-center gap-2 text-sm font-medium text-[#39291f]"
+            onClick={() => {
+              void signOut(() => navigate("/login", { replace: true }));
+            }}
+            className="rounded-full border border-[#8c5a38]/30 bg-[#fff8ed]/70 px-3 py-1.5 text-xs font-medium text-[#4b2d22] transition hover:bg-[#f7e5d0]"
+            aria-label="Log out"
           >
-            <span className="flex size-9 items-center justify-center rounded-full border border-[#8c5a38]/40 bg-[#b96f45] text-xs font-semibold text-white shadow-sm">
-              A
-            </span>
-            <span className="hidden sm:inline">Ayush</span>
-            <ChevronDown size={16} strokeWidth={2} />
+            Logout
           </button>
         </div>
       </div>

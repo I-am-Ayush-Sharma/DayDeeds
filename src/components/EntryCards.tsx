@@ -1,7 +1,8 @@
-import { Entries } from "../Entries";
-import { Heart, Smile, Zap, MoreVertical } from "lucide-react";
+import { Heart, Smile, Zap, Trash2 } from "lucide-react";
+import type { JournalEntry } from "../Types/journal";
 
 interface EntryCardsProps {
+  entries: JournalEntry[];
   input: string;
   moodFilter?: string;
   tagFilters?: string[];
@@ -11,9 +12,12 @@ interface EntryCardsProps {
   sortOrder?: "Newest" | "Oldest";
   viewMode?: "List" | "Grid";
   favoritesOnly?: boolean;
+  onFavoriteChange: (entry: JournalEntry) => void;
+  onDelete: (entry: JournalEntry) => void;
 }
 
 function EntryCards({
+  entries,
   input,
   moodFilter = "All Mood",
   tagFilters = [],
@@ -23,6 +27,8 @@ function EntryCards({
   sortOrder = "Newest",
   viewMode = "List",
   favoritesOnly = false,
+  onFavoriteChange,
+  onDelete,
 }: EntryCardsProps) {
   const query = input.trim().toLowerCase();
   const today = new Date();
@@ -47,8 +53,8 @@ function EntryCards({
     String(rangeStart.getDate()).padStart(2, "0"),
   ].join("-");
 
-  const filteredEntries = Entries.filter((entry) => {
-    const matchesFavorite = !favoritesOnly || entry.isfavorite;
+  const filteredEntries = entries.filter((entry) => {
+    const matchesFavorite = !favoritesOnly || entry.isFavorite;
     const matchesMood =
       moodFilter === "All Mood" ||
       entry.mood.toLowerCase() === moodFilter.toLowerCase();
@@ -113,12 +119,17 @@ function EntryCards({
   });
   return (
     <>
+      {sortedEntries.length === 0 && (
+        <p className="rounded-2xl border border-[#c58b55]/40 bg-[#fff8ed] p-6 text-center text-sm text-[#765d4c]">
+          No entries match these filters.
+        </p>
+      )}
       {sortedEntries.map((entry) => {
         const entryDate = new Date(`${entry.date}T00:00:00`);
 
         return (
           <article
-            key={`${entry.date}-${entry.time}-${entry.title}`}
+            key={entry.id}
             className={`group relative flex flex-col gap-3 sm:gap-4 rounded-2xl border border-[#c58b55]/60 bg-[#fff8ed]/90 p-3.5 sm:p-4 shadow-sm hover:shadow-md transition-shadow ${
               viewMode === "Grid"
                 ? "min-w-0"
@@ -146,15 +157,16 @@ function EntryCards({
                 <button
                   type="button"
                   aria-label={
-                    entry.isfavorite
+                    entry.isFavorite
                       ? "Remove from favorites"
                       : "Add to favorites"
                   }
                   className="p-1 rounded-lg hover:bg-[#f5ead8] transition-colors cursor-pointer"
+                  onClick={() => onFavoriteChange(entry)}
                 >
                   <Heart
                     className={`h-4.5 w-4.5 ${
-                      entry.isfavorite
+                      entry.isFavorite
                         ? "fill-[#8a3f2d] text-[#8a3f2d]"
                         : "text-[#7a4d35]"
                     }`}
@@ -162,10 +174,11 @@ function EntryCards({
                 </button>
                 <button
                   type="button"
-                  aria-label="More options"
+                  aria-label="Delete entry"
                   className="p-1 rounded-lg hover:bg-[#f5ead8] transition-colors cursor-pointer"
+                  onClick={() => onDelete(entry)}
                 >
-                  <MoreVertical className="h-4.5 w-4.5 text-[#7a4d35]" />
+                  <Trash2 className="h-4.5 w-4.5 text-[#7a4d35]" />
                 </button>
               </div>
             </div>
@@ -176,15 +189,16 @@ function EntryCards({
                 viewMode === "Grid" ? "w-full" : ""
               }`}
             >
-              <img
-                src={entry.thumbnail}
-                alt={entry.title}
-                className={`h-40 sm:h-44 rounded-xl object-cover shrink-0 ${
+              <div
+                aria-hidden="true"
+                className={`flex h-40 sm:h-44 items-center justify-center rounded-xl bg-gradient-to-br from-[#edcfab] to-[#c58b55]/60 text-4xl shrink-0 ${
                   viewMode === "Grid"
                     ? "w-full"
                     : "w-full md:h-28 md:w-36 lg:h-32 lg:w-44"
                 }`}
-              />
+              >
+                📔
+              </div>
 
               {/* Desktop/Tablet Date Column */}
               <div
@@ -247,15 +261,16 @@ function EntryCards({
                 <button
                   type="button"
                   aria-label={
-                    entry.isfavorite
+                    entry.isFavorite
                       ? "Remove from favorites"
                       : "Add to favorites"
                   }
                   className="p-1 rounded-lg hover:bg-[#f5ead8] transition-colors cursor-pointer"
+                  onClick={() => onFavoriteChange(entry)}
                 >
                   <Heart
                     className={`h-5 w-5 ${
-                      entry.isfavorite
+                      entry.isFavorite
                         ? "fill-[#8a3f2d] text-[#8a3f2d]"
                         : "text-[#7a4d35]"
                     }`}
@@ -263,10 +278,11 @@ function EntryCards({
                 </button>
                 <button
                   type="button"
-                  aria-label="More options"
+                  aria-label="Delete entry"
                   className="p-1 rounded-lg hover:bg-[#f5ead8] transition-colors cursor-pointer"
+                  onClick={() => onDelete(entry)}
                 >
-                  <MoreVertical className="h-5 w-5 text-[#7a4d35]" />
+                  <Trash2 className="h-5 w-5 text-[#7a4d35]" />
                 </button>
               </div>
 
@@ -286,6 +302,11 @@ function EntryCards({
               <span className="text-xs text-[#8b674f] font-medium">
                 {entry.words} words
               </span>
+              {entry.isDraft && (
+                <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-900">
+                  Draft
+                </span>
+              )}
             </div>
           </article>
         );

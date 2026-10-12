@@ -1,24 +1,23 @@
 import React from "react";
+import type { CalendarEntry } from "../../Types/calendar";
 
-const moods = [
-  "😐",
-  "🙂",
-  "😊",
-  "😊",
-  "😄",
-  "😄",
-  "😊",
-  "🙂",
-  "😄",
-  "😊",
-  "😄",
-  "😊",
-  "😄",
-  "😄",
-  "😊",
-];
+interface MonthMoodProps {
+  entries: CalendarEntry[];
+}
 
-const MonthMood: React.FC = () => {
+const MonthMood: React.FC<MonthMoodProps> = ({ entries }) => {
+  const moodEmojis: Record<CalendarEntry["mood"], string> = {
+    happy: "😊",
+    calm: "🌿",
+    focused: "⚡",
+    sad: "🌧️",
+    energetic: "☀️",
+  };
+  const moods = entries.slice(0, 15).map((entry) => moodEmojis[entry.mood]);
+  const positiveCount = entries.filter((entry) =>
+    ["happy", "calm", "focused", "energetic"].includes(entry.mood),
+  ).length;
+  const positivePercent = entries.length ? Math.round((positiveCount / entries.length) * 100) : 0;
   return (
     <section className="
       mt-4
@@ -55,7 +54,7 @@ const MonthMood: React.FC = () => {
           text-[9px] font-bold
           text-[#8b603d]
         ">
-          Mostly positive!
+          {entries.length ? `${positivePercent}% positive` : "No entries yet"}
         </span>
       </div>
 
@@ -64,7 +63,7 @@ const MonthMood: React.FC = () => {
         items-center justify-between
         overflow-hidden
       ">
-        {moods.map((mood, index) => (
+        {moods.length ? moods.map((mood, index) => (
           <span
             key={index}
             className="
@@ -75,7 +74,9 @@ const MonthMood: React.FC = () => {
           >
             {mood}
           </span>
-        ))}
+        )) : (
+          <span className="text-xs text-[#8b603d]">Your mood trend will appear after you save entries.</span>
+        )}
       </div>
     </section>
   );

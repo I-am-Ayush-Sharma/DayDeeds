@@ -1,9 +1,23 @@
 import { useState } from "react";
 import { Tag, Plus } from "lucide-react";
 
-export default function Tags() {
+interface TagsProps {
+  tags?: string[];
+  onTagsChange?: (tags: string[]) => void;
+}
+
+export default function Tags({ tags: controlledTags, onTagsChange }: TagsProps) {
   const [tagName, setTagName] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [localTags, setLocalTags] = useState<string[]>([]);
+  const tags = controlledTags ?? localTags;
+
+  function updateTags(nextTags: string[]) {
+    if (onTagsChange) {
+      onTagsChange(nextTags);
+    } else {
+      setLocalTags(nextTags);
+    }
+  }
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setTagName(e.target.value);
@@ -13,13 +27,15 @@ export default function Tags() {
     if (e.key === "Enter" && tagName.trim()) {
       e.preventDefault();
       const trimmedTag = tagName.trim();
-      setTags((prev) => (prev.includes(trimmedTag) ? prev : [...prev, trimmedTag]));
+      if (!tags.some((tag) => tag.toLowerCase() === trimmedTag.toLowerCase())) {
+        updateTags([...tags, trimmedTag]);
+      }
       setTagName("");
     }
   }
 
   function removeTag(tag: string) {
-    setTags((prev) => prev.filter((t) => t !== tag));
+    updateTags(tags.filter((existingTag) => existingTag !== tag));
   }
 
   return (
